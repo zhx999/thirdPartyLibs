@@ -270,6 +270,7 @@ list(APPEND build_list conduit )
 ################################
 # SILO
 ################################
+set(SILO_C_FLAGS "-fPIC -std=c90 ${C_FLAGS_NO_WARNINGS} ${CMAKE_C_FLAGS_RELEASE}")
 set(SILO_DIR "${CMAKE_INSTALL_PREFIX}/silo")
 set(SILO_URL "${TPL_MIRROR_DIR}/silo-4.11-bsd.tgz")
 message(STATUS "Building SILO found at ${SILO_URL}")
@@ -283,7 +284,7 @@ ExternalProject_Add( silo
                      DEPENDS ${HDF5_DEPENDENCIES}
                      CONFIGURE_COMMAND ../silo/configure
                                           CC=${HDF5_C_COMPILER}
-                                          CFLAGS=${HDF5_C_FLAGS}
+                                          CFLAGS=${SILO_C_FLAGS}
                                           CXX=${HDF5_CXX_COMPILER}
                                           --prefix=<INSTALL_DIR>
                                           --disable-fortran
@@ -922,7 +923,7 @@ if( ENABLE_SCOTCH )
         message( FATAL_ERROR "Building Scotch without MPI is not supported." )
     endif()
 
-    set( SCOTCH_C_FLAGS "${C_FLAGS_NO_WARNINGS} ${CMAKE_C_FLAGS_${BUILD_TYPE_UPPER}} -fPIC -DINTSIZE64 -DIDXSIZE64 -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DSCOTCH_METIS_PREFIX -Drestrict=__restrict" )
+    set( SCOTCH_C_FLAGS "${C_FLAGS_NO_WARNINGS} ${CMAKE_C_FLAGS_${BUILD_TYPE_UPPER}} -fPIC -std=c90 -DINTSIZE64 -DIDXSIZE64 -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DSCOTCH_METIS_PREFIX -Drestrict=__restrict" )
     set( SCOTCH_LD_FLAGS "-lm" )
 
     # OSX does not have pthread barriers used by Scotch
